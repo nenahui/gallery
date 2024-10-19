@@ -55,5 +55,6 @@ export interface Photo {
 
 export interface PhotoMutation {
   title: string;
+  description: string;
   image: File | null;
 }

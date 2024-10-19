@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { MainNav } from '@/components/mainNav/mainNav';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { NewPhoto } from '@/features/galleries/components/newPhoto/newPhoto';
 import { selectUser } from '@/features/users/usersSlice';
 import { logout } from '@/features/users/usersThunks';
 import { ArrowRightStartOnRectangleIcon, SquaresPlusIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -52,10 +53,12 @@ export const Header: React.FC = () => {
                   </PopoverContent>
                 </Popover>
 
-                <Button size={'sm'}>
-                  Add new photo
-                  <SquaresPlusIcon className={'text-white ml-1 size-4'} />
-                </Button>
+                <NewPhoto>
+                  <Button size={'sm'}>
+                    Add new photo
+                    <SquaresPlusIcon className={'text-white ml-1 size-4'} />
+                  </Button>
+                </NewPhoto>
               </div>
             ) : (
               <Link to={'/login'}>
