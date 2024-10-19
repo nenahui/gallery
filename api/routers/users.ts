@@ -1,14 +1,18 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { auth, type RequestWithUser } from '../middleware/auth';
 import { User } from '../model/User';
+import { imagesUpload } from '../multer';
 
 export const usersRouter = express.Router();
 
-usersRouter.post('/', async (req, res, next) => {
+usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
   try {
     const user = new User({
       username: req.body.username,
       password: req.body.password,
+      displayName: req.body.displayName,
+      avatar: req.file ? req.file.filename : null,
     });
 
     user.generateToken();
@@ -51,22 +55,14 @@ usersRouter.post('/sessions', async (req, res, next) => {
   }
 });
 
-usersRouter.delete('/sessions', async (req, res, next) => {
+usersRouter.delete('/sessions', auth, async (req: RequestWithUser, res, next) => {
   try {
-    const headerValue = req.get('Authorization');
+    if (!req.user) {
+      return res.status(401).send({ error: 'Unauthorized!' });
+    }
 
-    if (!headerValue) return res.status(204).send();
-
-    const [_bearer, token] = headerValue.split(' ');
-
-    if (!token) return res.status(204).send();
-
-    const user = await User.findOne({ token });
-
-    if (!user) return res.status(204).send();
-
-    user.generateToken();
-    await user.save();
+    req.user.generateToken();
+    await req.user.save();
 
     return res.status(204).send();
   } catch (error) {

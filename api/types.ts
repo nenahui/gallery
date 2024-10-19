@@ -2,8 +2,11 @@ import type { Model } from 'mongoose';
 
 export interface UserFields {
   username: string;
+  displayName: string;
+  avatar: string | null;
   password: string;
   token: string;
+  role: 'user' | 'admin';
 }
 
 export interface UserMethods {

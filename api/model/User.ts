@@ -26,6 +26,13 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
       message: 'This user is already registered!',
     },
   },
+  displayName: {
+    type: String,
+    required: true,
+  },
+  avatar: {
+    type: String,
+  },
   password: {
     type: String,
     required: true,
@@ -33,6 +40,11 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   token: {
     type: String,
     required: true,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
   },
 });
 

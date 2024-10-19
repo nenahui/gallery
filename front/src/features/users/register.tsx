@@ -11,6 +11,22 @@ import { Link, useNavigate } from 'react-router-dom';
 const initialState: RegisterMutation = {
   username: '',
   password: '',
+  displayName: '',
+  avatar: null,
+};
+
+interface FieldErrors {
+  username: boolean;
+  password: boolean;
+  displayName: boolean;
+  confirmPassword: boolean;
+}
+
+const initialErrors: FieldErrors = {
+  username: false,
+  password: false,
+  displayName: false,
+  confirmPassword: false,
 };
 
 export const Register: React.FC = () => {
@@ -19,10 +35,8 @@ export const Register: React.FC = () => {
   const error = useAppSelector(selectRegisterError);
   const navigate = useNavigate();
   const [registerMutation, setRegisterMutation] = useState<RegisterMutation>(initialState);
-  const [inputErrors, setInputErrors] = useState<{ username: boolean; password: boolean }>({
-    username: false,
-    password: false,
-  });
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [inputErrors, setInputErrors] = useState<FieldErrors>(initialErrors);
 
   const getFieldError = (field: string) => {
     return error?.errors[field]?.message;
@@ -31,7 +45,29 @@ export const Register: React.FC = () => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setRegisterMutation((prev) => ({ ...prev, [name]: value }));
-    setInputErrors((prev) => ({ ...prev, [name]: !value }));
+    setInputErrors((prev) => ({
+      ...prev,
+      [name]: !value,
+    }));
+  };
+
+  const handleConfirmPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setConfirmPassword(value);
+
+    setInputErrors((prev) => ({
+      ...prev,
+      confirmPassword: registerMutation.password !== value,
+    }));
+  };
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { id, files } = event.target;
+    const value = files && files[0] ? files[0] : null;
+    setRegisterMutation((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -41,11 +77,13 @@ export const Register: React.FC = () => {
       const errors = {
         username: !registerMutation.username,
         password: !registerMutation.password,
+        displayName: !registerMutation.displayName,
+        confirmPassword: registerMutation.password !== confirmPassword,
       };
 
       setInputErrors(errors);
 
-      if (errors.username || errors.password) {
+      if (errors.username || errors.password || errors.displayName || errors.confirmPassword) {
         return;
       }
 
@@ -82,6 +120,17 @@ export const Register: React.FC = () => {
 
               <UsersInput
                 onChange={handleChange}
+                name={'displayName'}
+                label={'Display name'}
+                error={getFieldError('displayName')}
+                value={registerMutation.displayName}
+                placeholder={'Enter your display name'}
+                autoComplete={'current-username'}
+                className={inputErrors.displayName ? 'ring-red-600 ring-1 focus-visible:ring-red-600' : ''}
+              />
+
+              <UsersInput
+                onChange={handleChange}
                 name={'password'}
                 label={'Password'}
                 error={getFieldError('password')}
@@ -90,6 +139,26 @@ export const Register: React.FC = () => {
                 type={'password'}
                 autoComplete={'new-password'}
                 className={inputErrors.password ? 'ring-red-600 ring-1 focus-visible:ring-red-600' : ''}
+              />
+
+              <UsersInput
+                onChange={handleConfirmPasswordChange}
+                name={'confirmPassword'}
+                label={'Confirm password'}
+                error={inputErrors.confirmPassword ? 'Passwords do not match' : ''}
+                value={confirmPassword}
+                placeholder={'Enter your password'}
+                type={'password'}
+                autoComplete={'new-password'}
+                className={inputErrors.confirmPassword ? 'ring-red-600 ring-1 focus-visible:ring-red-600' : ''}
+              />
+
+              <UsersInput
+                onChange={handleImageChange}
+                type={'file'}
+                name={'avatar'}
+                label={'Avatar'}
+                placeholder={'Select an avatar'}
               />
 
               <Button type={'submit'} disabled={loading} className={'select-none'}>

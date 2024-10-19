@@ -9,7 +9,17 @@ export const register = createAsyncThunk<User, RegisterMutation, { rejectValue: 
   'users/register',
   async (registerMutation, { rejectWithValue }) => {
     try {
-      const { data: user } = await axiosApi.post<User>('/users', registerMutation);
+      const formData = new FormData();
+
+      const keys = Object.keys(registerMutation) as (keyof RegisterMutation)[];
+      keys.forEach((key) => {
+        const value = registerMutation[key];
+        if (value !== null) {
+          formData.append(key, value);
+        }
+      });
+
+      const { data: user } = await axiosApi.post<User>('/users', formData);
 
       return user;
     } catch (error) {

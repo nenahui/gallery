@@ -1,4 +1,4 @@
-import { Home } from '@/features/home/home';
+import { Galleries } from '@/features/galleries/galleries';
 import { Login } from '@/features/users/login';
 import { Register } from '@/features/users/register';
 import React from 'react';
@@ -8,7 +8,7 @@ export const App: React.FC = () => {
   return (
     <div className={'container mx-auto'}>
       <Routes>
-        <Route path={'/'} element={<Home />} />
+        <Route path={'/'} element={<Galleries />} />
         <Route path={'/login'} element={<Login />} />
         <Route path={'/register'} element={<Register />} />
       </Routes>

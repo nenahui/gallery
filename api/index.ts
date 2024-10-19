@@ -7,6 +7,7 @@ import { usersRouter } from './routers/users';
 const app = express();
 
 app.use(cors(config.corsOptions));
+app.use(express.static(config.publicPath));
 app.use(express.json());
 app.use('/users', usersRouter);
 
