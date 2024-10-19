@@ -18,12 +18,12 @@ export const PhotoModal: React.FC<Props> = ({ photo, children }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className={'rounded-xl border-none gap-2'}>
+      <DialogContent className={'rounded-xl border-none gap-2 max-w-3xl'}>
         <DialogHeader>
           <DialogTitle>{photo.title}</DialogTitle>
           <DialogDescription>{photo.description}</DialogDescription>
         </DialogHeader>
-        <img src={`${API_URL}/${photo.image}`} alt={`${photo.title} image`} className={'w-full rounded-lg h-full'} />
+        <img src={`${API_URL}/${photo.image}`} alt={`${photo.title} image`} className={'rounded-lg'} />
       </DialogContent>
     </Dialog>
   );
