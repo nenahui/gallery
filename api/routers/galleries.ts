@@ -1,7 +1,6 @@
 import express from 'express';
 import { Types } from 'mongoose';
 import { auth, type RequestWithUser } from '../middleware/auth';
-import { galleryValidateFields } from '../middleware/galleryFieldsValidate';
 import { Gallery } from '../model/Gallery';
 import { imagesUpload } from '../multer';
 
@@ -17,34 +16,32 @@ galleriesRouter.get('/', async (_req, res, next) => {
   }
 });
 
-galleriesRouter.post(
-  '/',
-  auth,
-  imagesUpload.single('image'),
-  galleryValidateFields,
-  async (req: RequestWithUser, res, next) => {
-    try {
-      if (!req.user) {
-        return { error: 'Unauthorized!' };
-      }
-
-      const { title, description } = req.body;
-
-      const gallery = new Gallery({
-        author: req.user._id,
-        title,
-        description,
-        image: req.file?.filename,
-      });
-
-      await gallery.save();
-
-      return res.send(gallery);
-    } catch (error) {
-      return next(error);
+galleriesRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
+  try {
+    if (!req.user) {
+      return { error: 'Unauthorized!' };
     }
+
+    const { title, description } = req.body;
+
+    if (!title || !description) {
+      return res.status(400).send({ error: 'Title, image and description are required!' });
+    }
+
+    const gallery = new Gallery({
+      author: req.user._id,
+      title,
+      description,
+      image: req.file?.filename,
+    });
+
+    await gallery.save();
+
+    return res.send(gallery);
+  } catch (error) {
+    return next(error);
   }
-);
+});
 
 galleriesRouter.get('/users/:id', async (req: RequestWithUser, res, next) => {
   try {
@@ -53,7 +50,7 @@ galleriesRouter.get('/users/:id', async (req: RequestWithUser, res, next) => {
       return res.status(400).send({ error: 'Invalid ID!' });
     }
 
-    const galleries = await Gallery.find({ author: id });
+    const galleries = await Gallery.find({ author: id }).populate('author', 'displayName avatar username googleId');
 
     return res.send(galleries);
   } catch (error) {

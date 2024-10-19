@@ -23,7 +23,7 @@ export const Galleries: React.FC = () => {
       {!photosFetching && photos.length === 0 ? (
         <small className={'text-muted-foreground block text-center mx-auto'}>No photos found. </small>
       ) : (
-        <div className={'grid grid-cols-3 gap-3'}>
+        <div className={'grid grid-cols-2 lg:grid-cols-3 gap-3'}>
           {photos.map((photo) => (
             <PhotoCard key={photo._id} photo={photo} />
           ))}

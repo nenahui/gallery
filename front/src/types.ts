@@ -42,6 +42,7 @@ export interface Author {
   displayName: string;
   avatar: string;
   googleId?: string;
+  role: 'admin' | 'user';
 }
 
 export interface Photo {

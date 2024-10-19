@@ -6,7 +6,7 @@ configDotenv();
 
 const rootPath = __dirname;
 
-const corsWhitelist = ['http://localhost:3000', 'http://172.20.10.2:3000'];
+const corsWhitelist = ['http://localhost:3000', 'http://172.20.10.2:3000', 'http://172.29.176.85:3000'];
 
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {

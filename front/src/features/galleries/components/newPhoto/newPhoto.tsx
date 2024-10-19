@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { selectPhotosCreating } from '@/features/galleries/galleriesSlice';
-import { createPhoto, fetchPhotos } from '@/features/galleries/galleriesThunks';
+import { createPhoto, fetchPhotos, fetchPhotosUser } from '@/features/galleries/galleriesThunks';
+import { selectUser } from '@/features/users/usersSlice';
 import type { PhotoMutation } from '@/types';
 import React, { type PropsWithChildren, useRef, useState } from 'react';
 import {
@@ -17,6 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useLocation } from 'react-router-dom';
 
 const initialState: PhotoMutation = {
   title: '',
@@ -29,6 +31,8 @@ export const NewPhoto: React.FC<PropsWithChildren> = ({ children }) => {
   const dispatch = useAppDispatch();
   const photosCreating = useAppSelector(selectPhotosCreating);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const user = useAppSelector(selectUser);
+  const { pathname: path } = useLocation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -54,7 +58,11 @@ export const NewPhoto: React.FC<PropsWithChildren> = ({ children }) => {
     await dispatch(createPhoto(photoMutation)).unwrap();
     closeRef.current?.click();
     setPhotoMutation(initialState);
-    dispatch(fetchPhotos());
+    if (path === '/') {
+      dispatch(fetchPhotos());
+    } else if (user && path === `/users/${user._id}`) {
+      dispatch(fetchPhotosUser(user._id));
+    }
   };
 
   return (

@@ -1,5 +1,6 @@
 import { Layout } from '@/components/layout/layout';
 import { Galleries } from '@/features/galleries/galleries';
+import { UserGalleries } from '@/features/galleries/userGalleries';
 import { Login } from '@/features/users/login';
 import { Register } from '@/features/users/register';
 import React from 'react';
@@ -10,6 +11,7 @@ export const App: React.FC = () => {
     <Layout>
       <Routes>
         <Route path={'/'} element={<Galleries />} />
+        <Route path={'/users/:id'} element={<UserGalleries />} />
         <Route path={'/login'} element={<Login />} />
         <Route path={'/register'} element={<Register />} />
       </Routes>
