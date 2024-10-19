@@ -20,8 +20,8 @@ galleriesRouter.get('/', async (_req, res, next) => {
 galleriesRouter.post(
   '/',
   auth,
-  galleryValidateFields,
   imagesUpload.single('image'),
+  galleryValidateFields,
   async (req: RequestWithUser, res, next) => {
     try {
       if (!req.user) {
