@@ -3,8 +3,9 @@ import { Loader } from '@/components/loader/loader';
 import { Button } from '@/components/ui/button';
 import { UsersInput } from '@/features/users/components/users-input/users-input';
 import { selectRegisterError, selectRegisterLoading } from '@/features/users/usersSlice';
-import { register } from '@/features/users/usersThunks';
+import { googleLogin, register } from '@/features/users/usersThunks';
 import type { RegisterMutation } from '@/types';
+import { type CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import React, { type ChangeEvent, type FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -94,6 +95,14 @@ export const Register: React.FC = () => {
     }
   };
 
+  const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
+    console.log(credentialResponse);
+    if (credentialResponse.credential) {
+      await dispatch(googleLogin(credentialResponse.credential)).unwrap();
+      navigate('/');
+    }
+  };
+
   return (
     <div className={'grid place-items-center h-screen'}>
       <div className={'max-w-sm w-full'}>
@@ -164,6 +173,13 @@ export const Register: React.FC = () => {
               <Button type={'submit'} disabled={loading} className={'select-none'}>
                 Sign Up {loading && <Loader className={'text-muted size-5 ml-2'} />}
               </Button>
+
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => {
+                  console.error('Google login error');
+                }}
+              />
             </div>
           </form>
         </main>
