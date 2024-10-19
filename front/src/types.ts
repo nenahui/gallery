@@ -41,13 +41,16 @@ export interface Author {
   username: string;
   displayName: string;
   avatar: string;
+  googleId?: string;
 }
 
 export interface Photo {
   _id: string;
   author: Author;
   title: string;
+  description: string;
   image: string;
+  createdAt: string;
 }
 
 export interface PhotoMutation {

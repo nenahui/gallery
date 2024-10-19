@@ -9,7 +9,7 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       {isNotAuthPage && <Header />}
-      <div className={`${isNotAuthPage && 'container max-w-4xl mx-auto my-4'}`}>{children}</div>
+      <div className={`${isNotAuthPage && 'container max-w-5xl mx-auto my-4'}`}>{children}</div>
     </>
   );
 };

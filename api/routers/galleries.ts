@@ -9,7 +9,7 @@ export const galleriesRouter = express.Router();
 
 galleriesRouter.get('/', async (_req, res, next) => {
   try {
-    const galleries = await Gallery.find().populate('author', 'displayName avatar username');
+    const galleries = await Gallery.find().populate('author', 'displayName avatar username googleId');
 
     return res.send(galleries);
   } catch (error) {
