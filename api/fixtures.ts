@@ -25,7 +25,7 @@ const run = async () => {
       token: randomUUID(),
     },
     {
-      username: 'Argen',
+      username: 'argen',
       displayName: 'Ashimov Argen',
       password: '123qwe',
       avatar: '/fixtures/a2.jpg',
