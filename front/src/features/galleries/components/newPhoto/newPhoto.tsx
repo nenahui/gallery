@@ -104,7 +104,7 @@ export const NewPhoto: React.FC<PropsWithChildren> = ({ children }) => {
           </div>
 
           <Button disabled={photosCreating} type={'submit'} className={'w-full'}>
-            Create {photosCreating && <Loader />}
+            Create {photosCreating && <Loader className={'ml-2'} />}
           </Button>
           <DialogClose ref={closeRef} />
         </form>

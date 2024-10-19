@@ -8,6 +8,7 @@ import { PhotoModal } from '@/features/galleries/components/photoModal/photoModa
 import { selectPhotosDeleting } from '@/features/galleries/galleriesSlice';
 import { deletePhoto, fetchPhotos, fetchPhotosUser } from '@/features/galleries/galleriesThunks';
 import { selectUser } from '@/features/users/usersSlice';
+import { formatDate } from '@/lib/formatDate';
 import type { Photo } from '@/types';
 import { TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { PopoverClose } from '@radix-ui/react-popover';
@@ -50,7 +51,10 @@ export const PhotoCard: React.FC<Props> = ({ photo }) => {
           />
 
           <div className={'flex flex-col relative z-30'}>
-            <span className={'text-sm font-medium leading-none'}>{photo.author.displayName}</span>
+            <div className={'flex gap-1 items-center w-full'}>
+              <span className={'text-sm font-medium leading-none'}>{photo.author.displayName}</span>
+              <small className={'text-muted-foreground'}>- {formatDate(photo.createdAt)}</small>
+            </div>
             <span className={'text-xs leading-none text-muted-foreground'}>{photo.author.username}</span>
           </div>
         </div>
@@ -79,8 +83,8 @@ export const PhotoCard: React.FC<Props> = ({ photo }) => {
       {(photo.author._id === user?._id || user?.role === 'admin') && (
         <Popover>
           <PopoverTrigger asChild>
-            <button className={'absolute bg-gray-200 p-0.5 top-2 right-2 rounded-lg'}>
-              <TrashIcon className={'size-6 text-black'} strokeWidth={0.9} />
+            <button className={'absolute bg-gray-200 size-7 grid place-items-center p-0.5 top-0 right-2 rounded-lg'}>
+              <TrashIcon className={'size-5 text-black'} strokeWidth={0.9} />
             </button>
           </PopoverTrigger>
           <PopoverContent className={'max-w-max space-x-1 p-2'}>
@@ -94,7 +98,7 @@ export const PhotoCard: React.FC<Props> = ({ photo }) => {
               </PopoverClose>
               <PopoverClose asChild>
                 <Button onClick={handleDelete} size={'sm'} className={'flex-1'}>
-                  Delete <TrashIcon />
+                  Delete <TrashIcon strokeWidth={0.9} />
                 </Button>
               </PopoverClose>
             </div>
