@@ -4,14 +4,13 @@ import mongoose from 'mongoose';
 import { randomUUID } from 'node:crypto';
 import { config } from '../config';
 import { auth, type RequestWithUser } from '../middleware/auth';
-import { usersFieldsValidate } from '../middleware/usersFieldsValidate';
 import { User } from '../model/User';
 import { imagesUpload } from '../multer';
 
 export const usersRouter = express.Router();
 const googleClientId = new OAuth2Client(config.google.clientId);
 
-usersRouter.post('/', usersFieldsValidate, imagesUpload.single('avatar'), async (req, res, next) => {
+usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
   try {
     const user = new User({
       username: req.body.username,
