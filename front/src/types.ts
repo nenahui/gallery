@@ -17,6 +17,7 @@ export interface User {
   avatar: string;
   token: string;
   role: 'admin' | 'user';
+  googleId?: string;
 }
 
 export interface ValidationError {

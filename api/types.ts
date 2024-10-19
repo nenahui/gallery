@@ -7,6 +7,7 @@ export interface UserFields {
   password: string;
   token: string;
   role: 'user' | 'admin';
+  googleId?: string;
 }
 
 export interface UserMethods {

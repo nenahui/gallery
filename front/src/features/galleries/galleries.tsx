@@ -37,7 +37,11 @@ export const Galleries: React.FC = () => {
         <h2 className={'bg-gray-200 px-3 py-1 rounded-md text-sm'}>Display name - {user.displayName}</h2>
         <h2 className={'bg-gray-200 px-3 py-1 rounded-md text-sm'}>ID - {user._id}</h2>
         <h3 className={'bg-gray-200 px-3 py-1 rounded-md text-sm'}>Token - {user.token}</h3>
-        <img className={'size-64'} src={`${API_URL}/${user.avatar}`} alt={`${user.username} image`} />
+        <img
+          className={'size-64'}
+          src={`${user.googleId ? user.avatar : `${API_URL}/${user.avatar}`}`}
+          alt={`${user.username} image`}
+        />
         <Button onClick={handleLogout}>
           Logout <LogOut className={'size-4 ml-2'} />
         </Button>

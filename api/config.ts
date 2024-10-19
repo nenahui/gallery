@@ -1,5 +1,8 @@
 import type { CorsOptions } from 'cors';
+import { configDotenv } from 'dotenv';
 import path from 'path';
+
+configDotenv();
 
 const rootPath = __dirname;
 
@@ -21,4 +24,8 @@ export const config = {
   rootPath,
   corsOptions,
   publicPath: path.join(rootPath, 'public'),
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  },
 };
