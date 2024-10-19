@@ -23,7 +23,11 @@ export const PhotoModal: React.FC<Props> = ({ photo, children }) => {
           <DialogTitle>{photo.title}</DialogTitle>
           <DialogDescription>{photo.description}</DialogDescription>
         </DialogHeader>
-        <img src={`${API_URL}/${photo.image}`} alt={`${photo.title} image`} className={'rounded-lg'} />
+        <img
+          src={`${API_URL}/${photo.image}`}
+          alt={`${photo.title} image`}
+          className={'rounded-lg w-full object-cover'}
+        />
       </DialogContent>
     </Dialog>
   );
