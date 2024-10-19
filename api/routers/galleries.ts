@@ -1,5 +1,5 @@
 import express from 'express';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { auth, type RequestWithUser } from '../middleware/auth';
 import { Gallery } from '../model/Gallery';
 import { imagesUpload } from '../multer';
@@ -24,10 +24,6 @@ galleriesRouter.post('/', auth, imagesUpload.single('image'), async (req: Reques
 
     const { title, description } = req.body;
 
-    if (!title || !description) {
-      return res.status(400).send({ error: 'Title, image and description are required!' });
-    }
-
     const gallery = new Gallery({
       author: req.user._id,
       title,
@@ -39,6 +35,10 @@ galleriesRouter.post('/', auth, imagesUpload.single('image'), async (req: Reques
 
     return res.send(gallery);
   } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      return res.status(400).send(error);
+    }
+
     return next(error);
   }
 });
@@ -46,6 +46,7 @@ galleriesRouter.post('/', auth, imagesUpload.single('image'), async (req: Reques
 galleriesRouter.get('/users/:id', async (req: RequestWithUser, res, next) => {
   try {
     const { id } = req.params;
+
     if (!Types.ObjectId.isValid(id)) {
       return res.status(400).send({ error: 'Invalid ID!' });
     }
