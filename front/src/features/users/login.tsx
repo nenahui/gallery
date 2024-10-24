@@ -50,7 +50,6 @@ export const Login: React.FC = () => {
   };
 
   const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
-    console.log(credentialResponse);
     if (credentialResponse.credential) {
       await dispatch(googleLogin(credentialResponse.credential)).unwrap();
       navigate('/');
