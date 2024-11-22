@@ -8,10 +8,10 @@ import { PhotoModal } from '@/features/galleries/components/photoModal/photoModa
 import { selectPhotosDeleting } from '@/features/galleries/galleriesSlice';
 import { deletePhoto, fetchPhotos, fetchPhotosUser } from '@/features/galleries/galleriesThunks';
 import { selectUser } from '@/features/users/usersSlice';
-import { formatDate } from '@/lib/formatDate';
 import type { Photo } from '@/types';
 import { TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { PopoverClose } from '@radix-ui/react-popover';
+import dayjs from 'dayjs';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -24,6 +24,7 @@ export const PhotoCard: React.FC<Props> = ({ photo }) => {
   const dispatch = useAppDispatch();
   const { pathname: path } = useLocation();
   const photosDeleting = useAppSelector(selectPhotosDeleting);
+  const formatedDate = dayjs(photo.createdAt).format('DD.MM.YY HH:mm');
 
   const fetchPhotosFn = async () => {
     if (path === '/') {
@@ -50,10 +51,10 @@ export const PhotoCard: React.FC<Props> = ({ photo }) => {
             alt={`${photo.author.displayName} avatar`}
           />
 
-          <div className={'flex flex-col relative z-30'}>
-            <div className={'flex gap-1 items-center w-full'}>
+          <div className={'flex flex-col relative z-30 w-full'}>
+            <div className={'flex gap-1 items-center justify-between w-full'}>
               <span className={'text-sm font-medium leading-none'}>{photo.author.displayName}</span>
-              <small className={'text-muted-foreground'}>- {formatDate(photo.createdAt)}</small>
+              <small className={'text-muted-foreground'}>{formatedDate}</small>
             </div>
             <span className={'text-xs leading-none text-muted-foreground'}>{photo.author.username}</span>
           </div>
